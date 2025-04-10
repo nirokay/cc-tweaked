@@ -10,14 +10,16 @@ local function addChest(chestPrefix, name)
     if prefix ~= chestPrefix then return end
     if name == options.chest.input or name == options.chest.output then return end
     local block = peripheral.wrap(name)
-    chests.storage[#chests.storage + 1] = block
+    chests.storage[name] = block
 end
 
-for index = 1, peripheral.getNames() do
-    local name = peripheral.getNames()[index]
-    for _, chestPrefix in pairs(options.chest.storagePrefix) do
-        if #name >= #chestPrefix then
-            addChest(chestPrefix, name)
+function chests.mountChests()
+    for index = 1, peripheral.getNames() do
+        local name = peripheral.getNames()[index]
+        for _, chestPrefix in pairs(options.chest.storagePrefix) do
+            if #name >= #chestPrefix then
+                addChest(chestPrefix, name)
+            end
         end
     end
 end
