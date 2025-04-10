@@ -5,17 +5,18 @@ local chests = {
     storage = {}
 }
 
-local function addChest(chestPrefix, name, block)
+local function addChest(chestPrefix, name)
     local prefix = string.sub(name, 1, #name)
     if prefix ~= chestPrefix then return end
     if name == options.chest.input or name == options.chest.output then return end
+    local block = peripheral.wrap(name)
     chests.storage[#chests.storage + 1] = block
 end
 
-for name, block in ipairs(peripheral.getNames()) do
-    for chestPrefix in options.chest.storagePrefix do
+for name in ipairs(peripheral.getNames()) do
+    for i, chestPrefix in ipairs(options.chest.storagePrefix) do
         if #name > #chestPrefix then
-            addChest(chestPrefix, name, block)
+            addChest(chestPrefix, name)
         end
     end
 end
