@@ -13,7 +13,7 @@ local function addChest(chestPrefix, name)
     chests.storage[#chests.storage + 1] = block
 end
 
-for index in peripheral.getNames() do
+for index = 1, peripheral.getNames() do
     local name = peripheral.getNames()[index]
     for _, chestPrefix in pairs(options.chest.storagePrefix) do
         if #name >= #chestPrefix then
