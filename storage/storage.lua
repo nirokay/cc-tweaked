@@ -2,20 +2,6 @@ local options = require("options")
 local chests = require("chests")
 local storage = {}
 
---[[
-function storage.findChestWithItem(itemName)
-    local result = {}
-    for name, chest in pairs(chests.storage) do
-        local list = chest.list()
-        for i, slot in pairs(list) do
-
-        end
-    end
-    if #result == 0 then result[1] = chests.storage end
-end
-
-]]--
-
 function storage.pushSlotToChests(slot)
     local itemCount = chests.input.getItemDetail(slot)
     if itemCount == nil then return end

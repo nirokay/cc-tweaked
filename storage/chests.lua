@@ -5,12 +5,15 @@ local chests = {
     storage = {}
 }
 
+local chestCount = 0
+
 local function addChest(chestPrefix, name)
     local prefix = string.sub(name, 1, #chestPrefix)
     if prefix ~= chestPrefix then return end
     if name == options.chest.input or name == options.chest.output then return end
     local block = peripheral.wrap(name)
     chests.storage[name] = block
+    chestCount = chestCount + 1
 end
 
 function chests.mountChests()
@@ -22,7 +25,8 @@ function chests.mountChests()
             end
         end
     end
-    print("Mounted " .. #chests.storage .. " chests as storage.")
+    print("Mounted " .. chestCount .. " chests as storage!")
+    chestCount = 0
 end
 
 chests.mountChests()
