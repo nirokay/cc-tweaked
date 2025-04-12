@@ -45,7 +45,8 @@ function storage.pullItemByName(name)
     end
 
     for chestName, slots in pairs(locations) do
-        for slot = 1, slots do
+        for index = 1, #slots do
+            local slot = slots[index]
             local itemCount = chests.output.pullItems(chestName, slot)
             if itemCount == 0 then
                 print("Could not pull item...")
