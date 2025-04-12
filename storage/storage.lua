@@ -3,16 +3,14 @@ local chests = require("chests")
 local storage = {}
 
 function storage.pushSlotToChests(slot)
-    local itemCount = chests.input.getItemDetail(slot)
-    if itemCount == nil then return end
+    if chests.input.getItemDetail(slot) == nil then return end
+    for name, chest in pairs(chests.storage) do
+        local amount = chests.input.pushItems(name, slot)
 
-    for name, chest in ipairs(chests.storage) do
-        local pushedItems = chest.input.pushItems(name, slot)
-        print("Pushed " .. pushedItems .. " items")
-        if chests.input.getItemDetail(slot) == nil or chests.input.getItemDetail(slot) == 0 then return end
-    end
-    if chests.input.getItemDetail(slot) ~= nil then
-        print("Could not push items!")
+        if chests.input.getItemDetail(slot) == nil then
+            print("Pushed " .. amount .. " to chest " .. name .. "!")
+            return
+        end
     end
 end
 
