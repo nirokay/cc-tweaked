@@ -8,7 +8,7 @@ function storage.pushSlotToChests(slot)
         local amount = chests.input.pushItems(name, slot)
 
         if chests.input.getItemDetail(slot) == nil then
-            print("Pushed " .. amount .. " to chest " .. name .. "!")
+            print("Pushed " .. amount .. " items to chest " .. name .. "!")
             return
         end
     end
@@ -16,7 +16,7 @@ end
 
 function storage.pushAllItemsToChests()
     print("Pushing items to storage...")
-    for slot, item in ipairs(chests.input.list()) do
+    for slot, item in pairs(chests.input.list()) do
         storage.pushSlotToChests(slot)
     end
 end
