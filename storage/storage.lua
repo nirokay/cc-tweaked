@@ -25,12 +25,13 @@ function storage.pushSlotToChests(slot)
         print("Pushed " .. pushedItems .. " items")
         if chests.input.getItemDetail(slot) == nil or chests.input.getItemDetail(slot) == 0 then return end
     end
-    if chests.input.getItemDetail(slot) ~= nil and chests.input.getItemDetail(slot) ~= 0 then
+    if chests.input.getItemDetail(slot) ~= nil then
         print("Could not push items!")
     end
 end
 
 function storage.pushAllItemsToChests()
+    print("Pushing items to storage...")
     for slot, item in ipairs(chests.input.list()) do
         storage.pushSlotToChests(slot)
     end

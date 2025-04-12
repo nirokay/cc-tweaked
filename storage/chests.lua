@@ -14,7 +14,7 @@ local function addChest(chestPrefix, name)
 end
 
 function chests.mountChests()
-    for index = 1, peripheral.getNames() do
+    for index = 1, #peripheral.getNames() do
         local name = peripheral.getNames()[index]
         for _, chestPrefix in pairs(options.chest.storagePrefix) do
             if #name >= #chestPrefix then
@@ -22,6 +22,9 @@ function chests.mountChests()
             end
         end
     end
+    print("Mounted " .. #chests.storage .. " chests as storage.")
 end
+
+chests.mountChests()
 
 return chests
