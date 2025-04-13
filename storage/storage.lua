@@ -37,16 +37,21 @@ function storage.findItemBySubstring(substring)
     for chestName, chest in pairs(chests.storage) do
         for slot, item in pairs(chest.list()) do
             if string.find(item.name, substring) ~= nil then
+                -- New object:
                 if result[item.name] == nil then
                     result[item.name] = {
                         count = 0,
                         chests = {}
                     }
                 end
-                if result[item.name][chestName] == nil then
-                    result[item.name][chestName] = {}
-                end
-                table.insert(result[item.name].chests[chestName], slot)
+
+                -- Item count:
+                result[item.name].count = result[item.name].count + item.count
+
+                -- Chest slots:
+                local t = result[item.name].chests[chestName] or {}
+                table.insert(t, slot)
+                result[item.name].chests[chestName] = t
             end
         end
     end
