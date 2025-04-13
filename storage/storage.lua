@@ -58,6 +58,16 @@ function storage.findItemBySubstring(substring)
     return result
 end
 
+function storage.listItemByName(name)
+    local list = storage.findItemBySubstring(name)
+    table.sort(list, function(x, y)
+        return x.count > y.count
+    end)
+    for itemName, itemInfo in pairs(list) do
+        print(itemInfo.count .. "x " .. itemName)
+    end
+end
+
 
 function storage.pushSlotToChests(slot)
     if chests.input.getItemDetail(slot) == nil then return 0 end
