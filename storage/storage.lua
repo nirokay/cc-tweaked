@@ -4,25 +4,12 @@ local chests = require("chests")
 
 local storage = {}
 
-function storage.pushSlotToChests(slot)
-    if chests.input.getItemDetail(slot) == nil then return end
-    for name, chest in pairs(chests.storage) do
-        local amount = chests.input.pushItems(name, slot)
-        if chests.input.getItemDetail(slot) == nil then
-            print("Pushed " .. amount .. " items to chest " .. name .. "!")
-            return
-        end
-    end
-    print("Failed to push items from slot " .. slot .. "...")
-end
-function storage.pushAllItemsToChests()
-    print("Pushing items to storage...")
-    for slot, item in pairs(chests.input.list()) do
-        storage.pushSlotToChests(slot)
-    end
-end
-
--- @returns `table` { chest_name = {slot_1, slot2, ...}, ... }
+-- @returns `table` {
+--     [chest_name] = {
+--         slot_1, slot2, ...
+--     },
+--     ...
+-- }
 function storage.findItemByName(modlessName)
     local result = {}
     for chestName, chest in pairs(chests.storage) do
@@ -36,6 +23,57 @@ function storage.findItemByName(modlessName)
     return result
 end
 
+-- @returns `table` {
+--     [item_name] = {
+--          [chest_name] = {
+--              slot_1, slot_2, ...
+--          },
+--          ...
+--     },
+--     ...
+-- }
+function storage.findItemBySubstring(substring)
+    local result = {}
+    for chestName, chest in pairs(chests.storage) do
+        for slot, item in pairs(chest.list()) do
+            if string.find(item.name, substring) ~= nil then
+                if result[item.name] == nil then
+                    result[item.name] = {
+                        count = 0,
+                        chests = {}
+                    }
+                end
+                if result[item.name][chestName] == nil then
+                    result[item.name][chestName] = {}
+                end
+                table.insert(result[item.name].chests[chestName], slot)
+            end
+        end
+    end
+    return result
+end
+
+
+function storage.pushSlotToChests(slot)
+    if chests.input.getItemDetail(slot) == nil then return 0 end
+    for name, _ in pairs(chests.storage) do
+        local amount = chests.input.pushItems(name, slot)
+        if chests.input.getItemDetail(slot) == nil then return amount end
+    end
+    print("Failed to push items from slot " .. slot .. "...")
+    return 0
+end
+
+function storage.pushAllItemsToChests()
+    print("Pushing items to storage...")
+    local itemCount = 0
+    for slot, item in pairs(chests.input.list()) do
+        itemCount = itemCount + storage.pushSlotToChests(slot)
+    end
+    print("Pushed " .. itemCount .. "items to storage.")
+end
+
+
 function storage.pullItemByName(name)
     local modlessName = utils.getItemNameComponents(name).item
     local locations = storage.findItemByName(name)
@@ -44,15 +82,20 @@ function storage.pullItemByName(name)
         return
     end
 
+    local itemCount = 0
+    print("Pulling items...")
     for chestName, slots in pairs(locations) do
         for index = 1, #slots do
             local slot = slots[index]
-            local itemCount = chests.output.pullItems(chestName, slot)
-            if itemCount == 0 then
-                print("Could not pull item...")
+            local amount = chests.output.pullItems(chestName, slot)
+            itemCount = itemCount + amount
+            if amount == 0 then
+                print("Pulled " .. itemCount .. "items from storage, but was stopped... is output chest filled up?")
+                return
             end
         end
     end
+    print("Pulled " .. itemCount .. "items from storage.")
 end
 
 return storage
