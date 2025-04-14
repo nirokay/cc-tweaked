@@ -10,6 +10,10 @@ local optionsFile = "options.lua"
 local function urlToFile(name)
     local file = io.open(name, "w")
     local internet = http.get(url .. name)
+    if internet == nil then
+        print("Failed to load file '" .. name .. "'!")
+        return
+    end
     local text = internet.readAll()
     if file ~= nil then
         file:write(text)
