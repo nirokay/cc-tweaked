@@ -36,11 +36,7 @@ function ui.writeCentered(line, text)
 end
 
 
-function ui.placeHolderLoading()
-    for _, line in pairs({lineNumbers.slots.chart, lineNumbers.items.chart}) do
-        ui.writeCentered(line, "Loading...")
-    end
-end
+
 
 function ui.drawChart(line, minMax)
     local percentage = minMax.occupied / minMax.total
@@ -77,6 +73,22 @@ function ui.drawChart(line, minMax)
     end
     monitor.setBackgroundColor(colors.black)
     monitor.write(prettyPercentage)
+end
+
+function ui.placeHolderLoading()
+    for _, line in pairs({lineNumbers.slots.chart, lineNumbers.items.chart}) do
+        ui.writeCentered(line, "Loading...")
+    end
+    ui.drawChart(lineNumbers.slots.chart, {
+        total = 1,
+        occupied = 0,
+        available = 1
+    })
+    ui.drawChart(lineNumbers.items.chart, {
+        total = 1,
+        occupied = 0,
+        available = 1
+    })
 end
 
 local function draw()
