@@ -58,11 +58,16 @@ function storage.findItemBySubstring(substring)
     return result
 end
 
-function storage.listItemByName(name)
+function storage.getListItemByName(name)
     local list = storage.findItemBySubstring(name)
     table.sort(list, function(x, y)
-        return x.count > y.count
+        return x.count < y.count
     end)
+    return list
+end
+
+function storage.listItemByName(name)
+    local list = storage.getListItemByName(name)
     for itemName, itemInfo in pairs(list) do
         print(itemInfo.count .. "x " .. itemName)
     end
@@ -85,7 +90,7 @@ function storage.pushAllItemsToChests()
     for slot, item in pairs(chests.input.list()) do
         itemCount = itemCount + storage.pushSlotToChests(slot)
     end
-    print("Pushed " .. itemCount .. "items to storage.")
+    print("Pushed " .. itemCount .. " items to storage.")
 end
 
 
@@ -111,6 +116,40 @@ function storage.pullItemByName(name)
         end
     end
     print("Pulled " .. itemCount .. "items from storage.")
+end
+
+function storage.getInformation()
+    local result = {
+        slots = {
+            total = 0,
+            occupied = 0,
+            available = 0
+        },
+        items = {
+            total = 0,
+            occupied = 0,
+            available = 0
+        }
+    }
+    for chestName, chest in pairs(chests.storage) do
+        -- Slots:
+        local slots = chest.size()
+        local occupied = #chest.list()
+        result.slots.total = result.slots.total + slots
+        result.slots.occupied = result.slots.occupied + occupied
+        result.slots.available = result.slots.available + slots - occupied
+
+        -- Items:
+        for slot = 1, slots do
+            result.items.total = result.items.total + (chest.getItemLimit(slot) or 64)
+            local details = chest.getItemDetail(slot)
+            if details ~= nil then
+                result.items.occupied = result.items.occupied + details.count
+            end
+        end
+        result.items.available = result.items.total - result.items.occupied
+    end
+    return result
 end
 
 return storage
