@@ -79,19 +79,10 @@ function ui.placeHolderLoading()
     for _, line in pairs({lineNumbers.slots.chart, lineNumbers.items.chart}) do
         ui.writeCentered(line, "Loading...")
     end
-    ui.drawChart(lineNumbers.slots.chart, {
-        total = 1,
-        occupied = 0,
-        available = 1
-    })
-    ui.drawChart(lineNumbers.items.chart, {
-        total = 1,
-        occupied = 0,
-        available = 1
-    })
+    
 end
 
-local function draw()
+function ui.draw()
     ui.writeCentered(lineNumbers.title, "Storage System")
     ui.writeCentered(lineNumbers.slots.title, "Slots")
     ui.writeCentered(lineNumbers.items.title, "Items")
@@ -103,7 +94,21 @@ local function draw()
         ui.drawChart(lineNumbers.slots.chart, details.slots)
         ui.drawChart(lineNumbers.items.chart, details.items)
     else
-        ui.placeHolderLoading()
+        monitor.setForegroundColor(colors.lightGray)
+        ui.writeCentered(lineNumbers.slots.text, "Loading...")
+        ui.writeCentered(lineNumbers.items.text, "Loading...")
+        monitor.setForegroundColor(colors.white)
+
+        ui.drawChart(lineNumbers.slots.chart, {
+            total = 1,
+            occupied = 0,
+            available = 1
+        })
+        ui.drawChart(lineNumbers.items.chart, {
+            total = 1,
+            occupied = 0,
+            available = 1
+        })
     end
 end
 
@@ -112,13 +117,13 @@ function ui.update()
     monitor.clear()
 
     -- Draw old screen or placeholder:
-    draw()
+    ui.draw()
 
     -- Expensive task:
     details = storage.getInformation()
 
     -- Draw new screen:
-    draw()
+    ui.draw()
     alreadyInit = true
 end
 
