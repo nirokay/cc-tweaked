@@ -1,6 +1,7 @@
 local url = "https://raw.githubusercontent.com/nirokay/cc-tweaked/refs/heads/master/storage/"
 local files = {
     "chests.lua",
+    "startup.lua",
     "storage.lua",
     "ui.lua",
     "utils.lua"
