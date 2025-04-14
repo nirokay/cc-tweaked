@@ -2,8 +2,8 @@ local url = "https://raw.githubusercontent.com/nirokay/cc-tweaked/refs/heads/mas
 local files = {
     "chests.lua",
     "storage.lua",
-    "ui",
-    "utils"
+    "ui.lua",
+    "utils.lua"
 }
 local optionsFile = "options.lua"
 
