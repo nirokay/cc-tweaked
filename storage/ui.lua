@@ -94,10 +94,10 @@ function ui.draw()
         ui.drawChart(lineNumbers.slots.chart, details.slots)
         ui.drawChart(lineNumbers.items.chart, details.items)
     else
-        monitor.setForegroundColor(colors.lightGray)
+        monitor.setTextColor(colors.lightGray)
         ui.writeCentered(lineNumbers.slots.text, "Loading...")
         ui.writeCentered(lineNumbers.items.text, "Loading...")
-        monitor.setForegroundColor(colors.white)
+        monitor.setTextColor(colors.white)
 
         ui.drawChart(lineNumbers.slots.chart, {
             total = 1,
