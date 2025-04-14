@@ -8,7 +8,7 @@ local lineNumbers = {
     items = 6
 }
 
-local details = storage.getInformation()
+local details = {} --storage.getInformation()
 
 function ui.noMonitor()
     local result = monitor == nil
@@ -19,8 +19,9 @@ function ui.noMonitor()
 end
 
 function ui.writeCentered(line, text)
-    local x, _ = monitor.getSize()
-    monitor.setCursorPos(line, (x - #text) / 2)
+    local _, width = monitor.getSize()
+    monitor.setCursorPos(line, (width - #text) / 2)
+    monitor.write(line)
 end
 
 
