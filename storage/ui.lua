@@ -1,4 +1,5 @@
 local storage = require("storage")
+local options = require("options")
 
 local ui = {}
 local monitor = peripheral.find("monitor")
@@ -21,6 +22,7 @@ local bgColour = colors.black
 
 local details = {} --storage.getInformation()
 
+
 function ui.noMonitor()
     local result = monitor == nil
     if result == nil then
@@ -31,11 +33,9 @@ end
 
 function ui.writeCentered(line, text)
     local width, _ = monitor.getSize()
-    monitor.setCursorPos((width - #text) / 2, line)
+    monitor.setCursorPos((width - #text) / 2 + 1, line + options.monitor.emptyLinesOnTop)
     monitor.write(text)
 end
-
-
 
 
 function ui.drawChart(line, minMax)
@@ -75,14 +75,10 @@ function ui.drawChart(line, minMax)
     monitor.write(prettyPercentage)
 end
 
-function ui.placeHolderLoading()
-    for _, line in pairs({lineNumbers.slots.chart, lineNumbers.items.chart}) do
-        ui.writeCentered(line, "Loading...")
-    end
-    
-end
 
 function ui.draw()
+    monitor.clear()
+
     ui.writeCentered(lineNumbers.title, "Storage System")
     ui.writeCentered(lineNumbers.slots.title, "Slots")
     ui.writeCentered(lineNumbers.items.title, "Items")
@@ -123,8 +119,8 @@ function ui.update()
     details = storage.getInformation()
 
     -- Draw new screen:
-    ui.draw()
     alreadyInit = true
+    ui.draw()
 end
 
 return ui

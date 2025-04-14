@@ -5,6 +5,9 @@ local options = {
         storagePrefix = {
             "minecraft:chest"
         }
+    },
+    monitor = {
+        emptyLinesOnTop = 1
     }
 }
 
