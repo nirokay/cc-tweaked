@@ -17,7 +17,7 @@ local lineNumbers = {
     }
 }
 local alreadyInit = false
-
+local additionalLines = options.monitor.emptyLinesOnTop or 1
 local bgColour = colors.black
 
 local details = {} --storage.getInformation()
@@ -33,12 +33,13 @@ end
 
 function ui.writeCentered(line, text)
     local width, _ = monitor.getSize()
-    monitor.setCursorPos((width - #text) / 2 + 1, line + options.monitor.emptyLinesOnTop)
+    monitor.setCursorPos((width - #text) / 2 + 1, line + additionalLines)
     monitor.write(text)
 end
 
 
-function ui.drawChart(line, minMax)
+function ui.drawChart(lineRaw, minMax)
+    local line = lineRaw + additionalLines
     local percentage = minMax.occupied / minMax.total
 
     local barBgColour = colors.gray
