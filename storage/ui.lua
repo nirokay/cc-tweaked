@@ -20,8 +20,8 @@ end
 
 function ui.writeCentered(line, text)
     local _, width = monitor.getSize()
-    monitor.setCursorPos(line, (width - #text) / 2)
-    monitor.write(line)
+    monitor.setCursorPos((width - #text) / 2, line)
+    monitor.write(text)
 end
 
 
