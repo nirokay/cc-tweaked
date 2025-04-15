@@ -96,7 +96,9 @@ function storage.getListItemsByTag(tag)
                         if not alreadyAdded then
                             result[item.name].count = result[item.name].count + item.count
                         end
-                        table.insert(result[item.name].relevantTags, itemTag)
+                        local t = result[item.name].relevantTags
+                        table.insert(t, itemTag)
+                        result[item.name].relevantTags = t
                         alreadyAdded = true
                     end
                 end
