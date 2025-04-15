@@ -82,9 +82,6 @@ end
 -- }
 function storage.getListItemsByTag(tag)
     local result = {}
-    local emptyTableEntry = {
-        count = 0
-    }
     for chestName, chest in pairs(chests.storage) do
         for slot = 1, chest.size() do
             local alreadyAdded = false
@@ -92,13 +89,14 @@ function storage.getListItemsByTag(tag)
             if item ~= nil and item.tags ~= nil then
                 for itemTag, tagExists in pairs(item.tags) do
                     if string.find(itemTag, tag) and tagExists then
-                        if result[item.name] == nil then result[item.name] = emptyTableEntry end
+                        if result[item.name] == nil then result[item.name] = {
+                            count = 0,
+                            relevantTags = {}
+                        } end
                         if not alreadyAdded then
                             result[item.name].count = result[item.name].count + item.count
                         end
-                        local t = result[item.name].relevantTags
-                        table.insert(t, itemTag)
-                        result[item.name].relevantTags = t
+                        table.insert(result[item.name].relevantTags, itemTag)
                         alreadyAdded = true
                     end
                 end
