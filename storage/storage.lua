@@ -10,7 +10,7 @@ local storage = {}
 --     },
 --     ...
 -- }
-function storage.findItemByName(modlessName)
+function storage.findItemByFullName(modlessName)
     local result = {}
     for chestName, chest in pairs(chests.storage) do
         for slot, item in pairs(chest.list()) do
@@ -32,7 +32,7 @@ end
 --     },
 --     ...
 -- }
-function storage.findItemBySubstring(substring)
+function storage.findItemsBySubstring(substring)
     local result = {}
     for chestName, chest in pairs(chests.storage) do
         for slot, item in pairs(chest.list()) do
@@ -58,23 +58,63 @@ function storage.findItemBySubstring(substring)
     return result
 end
 
-function storage.getListItemByName(name)
-    local list = storage.findItemBySubstring(name)
+function storage.getListItemsByName(name)
+    local list = storage.findItemsBySubstring(name)
     table.sort(list, function(x, y)
         return x.count < y.count
     end)
     return list
 end
 
-function storage.listItemByName(name)
-    local list = storage.getListItemByName(name)
+function storage.listItemsByName(name)
+    local list = storage.getListItemsByName(name)
+    for itemName, itemInfo in pairs(list) do
+        print(itemInfo.count .. "x " .. itemName)
+    end
+end
+
+-- @returns `table` {
+--     [item_name] = {
+--         count = x,
+--         relevantTags = { "very:cool/tag", ...}
+--     },
+--     ...
+-- }
+function storage.getListItemsByTag(tag)
+    local result = {}
+    local emptyTableEntry = {
+        count = 0
+    }
+    for chestName, chest in pairs(chests.storage) do
+        for slot = 1, chest.size() do
+            local alreadyAdded = false
+            local item = chest.getItemDetail(slot)
+            if item ~= nil and item.tags ~= nil then
+                for itemTag, tagExists in pairs(item.tags) do
+                    if string.find(itemTag, tag) and tagExists then
+                        if result[item.name] == nil then result[item.name] = emptyTableEntry end
+                        if not alreadyAdded then
+                            result[item.name].count = result[item.name].count + item.count
+                        end
+                        table.insert(result[item.name].relevantTags, itemTag)
+                        alreadyAdded = true
+                    end
+                end
+            end
+        end
+    end
+    return result
+end
+
+function storage.listItemsByTag(tag)
+    local list = storage.getListItemsByTag(tag)
     for itemName, itemInfo in pairs(list) do
         print(itemInfo.count .. "x " .. itemName)
     end
 end
 
 
-function storage.pushSlotToChests(slot)
+function storage.pushSlotToStorage(slot)
     if chests.input.getItemDetail(slot) == nil then return 0 end
     for name, _ in pairs(chests.storage) do
         local amount = chests.input.pushItems(name, slot)
@@ -84,7 +124,7 @@ function storage.pushSlotToChests(slot)
     return 0
 end
 
-function storage.pushAllItemsToChests()
+function storage.pushAllItemsToStorage()
     print("Pushing items to storage...")
     local itemCount = 0
     for slot, item in pairs(chests.input.list()) do
@@ -96,7 +136,7 @@ end
 
 function storage.pullItemByName(name)
     local modlessName = utils.getItemNameComponents(name).item
-    local locations = storage.findItemByName(name)
+    local locations = storage.findItemByFullName(name)
     if locations == {} then
         print("Item " .. modlessName .. " not found :(")
         return
@@ -117,6 +157,7 @@ function storage.pullItemByName(name)
     end
     print("Pulled " .. itemCount .. "items from storage.")
 end
+
 
 function storage.getInformation()
     local result = {
@@ -151,5 +192,6 @@ function storage.getInformation()
     end
     return result
 end
+
 
 return storage
