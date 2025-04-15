@@ -128,7 +128,7 @@ function storage.pushAllItemsToStorage()
     print("Pushing items to storage...")
     local itemCount = 0
     for slot, item in pairs(chests.input.list()) do
-        itemCount = itemCount + storage.pushSlotToChests(slot)
+        itemCount = itemCount + storage.pushSlotToStorage(slot)
     end
     print("Pushed " .. itemCount .. " items to storage.")
 end
