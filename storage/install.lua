@@ -25,7 +25,7 @@ local function urlToFile(name)
     end
 end
 
-print("Installing storage system through the internet...")
+print("Installing through the internet...")
 for _, name in pairs(files) do
     print("Installing '" .. name .. "'")
     urlToFile(name)
