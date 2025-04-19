@@ -1,8 +1,11 @@
 local url = "https://raw.githubusercontent.com/nirokay/cc-tweaked/refs/heads/master/store/"
 local files = {
     "devices.lua",
+    "initUserdata.lua",
     "startup.lua",
-    "templateUserData.lua"
+    "storage.lua",
+    "templateUserData.lua",
+    "ui.lua"
 }
 
 local function urlToFile(name)

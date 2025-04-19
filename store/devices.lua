@@ -1,13 +1,7 @@
 local userdata = require("disk/userdata")
+local device = {}
 
-local device = {
-    paymentInput = nil,
-    paymentStorage = nil,
-    goodsStorage = nil,
-    goodsOutput = nil
-}
-
-local function findOrWrap(name)
+function device.findOrWrap(name)
     local functions = {
         peripheral.wrap,
         peripheral.find
@@ -21,13 +15,9 @@ local function findOrWrap(name)
     return result
 end
 
-function device.findDevices()
-    device.paymentInput = findOrWrap(userdata.ids.paymentInput) or error("Failed to mount payment input")
-    device.paymentStorage = findOrWrap(userdata.ids.paymentStorage) or error("Failed to mount payment storage")
-    device.goodsOutput = findOrWrap(userdata.ids.goodsOutput) or error("Failed to mount goods output")
-    device.goodsStorage = findOrWrap(userdata.ids.goodsStorage) or error("Failed to mount goods storage")
-end
-
-device.findDevices()
+device.paymentInput = device.findOrWrap(userdata.ids.paymentInput) or error("Failed to mount payment input")
+device.paymentStorage = device.findOrWrap(userdata.ids.paymentStorage) or error("Failed to mount payment storage")
+device.goodsOutput = device.findOrWrap(userdata.ids.goodsOutput) or error("Failed to mount goods output")
+device.goodsStorage = device.findOrWrap(userdata.ids.goodsStorage) or error("Failed to mount goods storage")
 
 return device

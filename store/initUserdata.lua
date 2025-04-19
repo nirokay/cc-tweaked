@@ -11,13 +11,15 @@ if not fs.exists(pathUserData) then
     end
     local target = io.open(pathUserData, "w")
     if target == nil then
-        error("Could not open file '/disk/userdata.lua' to write init.")
         template:close()
+        error("Could not open file '/" .. pathUserData .. "' to write init, you may have to manually do that.")
     end
     target:write(template:read("a"))
 
     target:close()
     template:close()
 
-    error("Initialised userdata file, please modify it (location: '/disk/userdata.lua')!")
+    os.run({}, "edit /" .. pathUserData)
+    -- error("Initialised userdata file, please modify it (location: '/" .. pathUserData.. "')!")
+    error("Modified userdata file, please restart the computer.")
 end
