@@ -1,7 +1,7 @@
 local userdata = require("disk/userdata")
 local device = {}
 
-function device.findOrWrap(name)
+function device.findOrWrap(name) -- unused, i will need ids further on
     local functions = {
         peripheral.wrap,
         peripheral.find
@@ -15,9 +15,9 @@ function device.findOrWrap(name)
     return result
 end
 
-device.paymentInput = device.findOrWrap(userdata.ids.paymentInput) or error("Failed to mount payment input")
-device.paymentStorage = device.findOrWrap(userdata.ids.paymentStorage) or error("Failed to mount payment storage")
-device.goodsOutput = device.findOrWrap(userdata.ids.goodsOutput) or error("Failed to mount goods output")
-device.goodsStorage = device.findOrWrap(userdata.ids.goodsStorage) or error("Failed to mount goods storage")
+device.paymentInput = peripheral.wrap(userdata.ids.paymentInput) or error("Failed to mount payment input")
+device.paymentStorage = peripheral.wrap(userdata.ids.paymentStorage) or error("Failed to mount payment storage")
+device.goodsOutput = peripheral.wrap(userdata.ids.goodsOutput) or error("Failed to mount goods output")
+device.goodsStorage = peripheral.wrap(userdata.ids.goodsStorage) or error("Failed to mount goods storage")
 
 return device

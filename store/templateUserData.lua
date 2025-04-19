@@ -1,8 +1,23 @@
 -- Config:
 
 local userdata = {
-    owner = "", -- Player name of the shop owner,
-    description = "", -- Shop description
+    text = {
+        owner = { -- Shop Title
+            text = "", -- Player name of the shop owner
+            color = colors.white
+        },
+        description = { -- Shop description
+            text = "",
+            color = colors.lightGray
+        },
+        availability = { -- "Selling, X available:" text
+            color = colors.white
+        },
+        payment = { -- "Payment:" or "Choose payment:" text
+            color = colors.yellow
+        },
+        fontScale = 1
+    },
 
     ids = {
         paymentInput = "", -- ID of storage device that accepts payments
@@ -14,12 +29,14 @@ local userdata = {
     transaction = {
         goods = {
             name = "", -- Item name, example: "minecraft:wood_log",
-            quantity = 0 -- Item quantity, example: 64
+            quantity = 0, -- Item quantity, example: 64
+            color = colors.white
         },
         payments = { -- Multiple payment items supported
             {
                 name = "", -- Item name, example: "minecraft:diamond",
-                quantity = 0 -- Item quantity, example: 1
+                quantity = 0, -- Item quantity, example: 1
+                color = colors.yellow
             }
         }
     }
