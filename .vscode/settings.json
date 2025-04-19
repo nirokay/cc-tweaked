@@ -3,6 +3,7 @@
         "peripheral",
         "http",
         "colours",
-        "colors"
+        "colors",
+        "fs"
     ]
 }
