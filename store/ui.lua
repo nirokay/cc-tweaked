@@ -5,6 +5,7 @@ local ui = {}
 
 local additionalLines = 1
 local monitor = peripheral.find("monitor") or error("You need to connect a monitor.")
+monitor.setTextScale(userdata.text.fontScale or 1)
 
 function ui.writeCentered(line, text)
     local width, _ = monitor.getSize()
@@ -32,18 +33,25 @@ function ui.writeComments(comments)
     ui.resetColors()
 end
 
-function ui.update(comments)
-    monitor.setTextScale(userdata.text.fontScale or 1)
-    ui.resetColors()
-    monitor.clear()
+function ui.writeLine(line, text, col)
+    monitor.setTextColor(col or colors.white)
+    monitor.setCursorPos(1, line)
+    monitor.clearLine()
+    ui.writeCentered(line, text)
+end
 
-    ui.setCustomFontColour(userdata.text.owner.color)
-    ui.writeCentered(1, userdata.text.owner.text .. "'s shop")
-    ui.setCustomFontColour(userdata.text.description.color)
-    ui.writeCentered(2, userdata.text.description.text)
+function ui.update(comments)
+    ui.resetColors()
+    for line = 1, 3 do
+        monitor.setCursorPos(1, line)
+        monitor.clearLine()
+    end
+
+    ui.writeLine(1, userdata.text.owner.text .. "'s shop", userdata.text.owner.color)
+    ui.writeLine(2, userdata.text.description.text, userdata.text.description.color)
 
     ui.setCustomFontColour(userdata.text.availability.color)
-    ui.writeCentered(4, "Selling, " .. storage.getAllPossibleTransactions() ..  " available:")
+    ui.writeCentered(4, "Selling, " .. storage.getMaxPossibleTransactions() ..  " available:")
 
     ui.setCustomFontColour(userdata.transaction.goods.color)
     ui.writeCentered(5, userdata.transaction.goods.quantity .. "x " .. userdata.transaction.goods.name)

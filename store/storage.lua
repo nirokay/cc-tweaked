@@ -27,10 +27,14 @@ end
 function storage.transactionGiveGoods()
     local amountToGive = userdata.transaction.goods.quantity
     for slot, item in pairs(device.goodsStorage.list()) do
-        if item.name == userdata.transaction.goods.name then
-            local currentPush = device.goodsOutput.pull(userdata.ids.goodsStorage, slot, amountToGive)
-            amountToGive = amountToGive - currentPush
-            if amountToGive <= 0 then return true end
+        --local item = device.goodsStorage.getItemDetail(slot)
+        print(slot, item)
+        if item ~= nil then
+            if item.name == userdata.transaction.goods.name then
+                local currentPush = device.goodsOutput.pullItems(userdata.ids.goodsStorage, slot, amountToGive)
+                amountToGive = amountToGive - currentPush
+                if amountToGive <= 0 then return true end
+            end
         end
     end
 end
@@ -41,15 +45,23 @@ end
 
 function storage.transactionTakeMoney(payment)
     local moneyTaken = 0
-    for slot, item in pairs(device.paymentInput) do
+    for slot, item in pairs(device.paymentInput.list()) do
         if item.name == payment.name then
-            moneyTaken = moneyTaken + device.paymentInput.push(userdata.ids.paymentStorage, slot)
+            moneyTaken = moneyTaken + device.paymentInput.pushItems(userdata.ids.paymentStorage, slot)
         end
     end
 
     local transactions = math.floor(moneyTaken / payment.quantity)
-    local refund = moneyTaken % (payment.quantity * transactions)
+    local refund = 0
+    if transactions == 0 then
+        refund = moneyTaken
+    else
+        refund = moneyTaken % (payment.quantity * transactions)
+    end
     storage.refundMoney(payment.name, refund)
+    if refund ~= 0 then
+        print("Refunding " .. refund .. "x " .. payment.name)
+    end
     return transactions
 end
 
@@ -63,7 +75,7 @@ function storage.performTransactions()
     local result = {}
     local paidTransactions = 0
     for _, payment in pairs(userdata.transaction.payments) do
-        paidTransactions = paidTransactions + storage.transactionTakeMoney()
+        paidTransactions = paidTransactions + storage.transactionTakeMoney(payment)
         if paidTransactions > maxTransactions then
             local refundTransactions = paidTransactions - maxTransactions
             local refundItems = refundTransactions * payment.quantity
@@ -76,6 +88,7 @@ function storage.performTransactions()
         "No payment given."
     } end
     for transaction = 1, paidTransactions do
+        print(transaction, paidTransactions)
         storage.transactionGiveGoods()
     end
 end
