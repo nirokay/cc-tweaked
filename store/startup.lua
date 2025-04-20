@@ -5,6 +5,7 @@ require("initUserdata")
 local device = require("devices")
 local storage = require("storage")
 local relay = peripheral.find("redstone_relay") or error("Redstone relay required to be connected.")
+local logger = require("logger")
 
 -- Display on monitor:
 local ui = require("ui")
@@ -18,9 +19,10 @@ local function main()
     if not relay.getInput("front") then return false end
 
     -- Perform transaction:
-    print("Performing transaction...")
+    logger.write("BEGIN: Transaction -------------")
     comments = storage.performTransactions()
 
+    logger.write("END: Transaction ---------------\n")
     return true
 end
 
