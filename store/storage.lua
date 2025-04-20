@@ -103,9 +103,9 @@ function storage.performTransactions()
         end
     end
     if paidTransactions == 0 then
-        logger.write("Aborting, no payment provided.")
+        logger.write("Aborting, no(t enough) payment provided.")
         return {
-            "No payment given."
+            "No(t enough) payment given."
         }
     end
     for transaction = 1, paidTransactions do
