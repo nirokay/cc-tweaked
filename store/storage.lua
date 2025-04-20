@@ -44,7 +44,7 @@ function storage.refundMoney(paymentItemName, count)
     local toRefund = count
     for slot, item in pairs(device.paymentStorage.list()) do
         if item.name == paymentItemName then
-            device.paymentStorage.pushItems(slot, toRefund)
+            device.paymentStorage.pushItems(userdata.ids.paymentInput, slot, toRefund)
             if toRefund == 0 then
                 return
             end
