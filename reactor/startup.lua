@@ -1,6 +1,7 @@
 local devices = require("devices")
 local config = require("config")
 local utils = require("utils")
+local ui = require("ui")
 
 local reactor = devices.reactor
 
@@ -37,7 +38,9 @@ while true do
     )
 
     -- Monitor:
-    -- TODO
+    if devices.monitor then
+        ui.update()
+    end
 
     -- Log:
     if debugPrint then
@@ -53,5 +56,5 @@ while true do
         term.clear()
         print(table.concat(lines, "\n"))
     end
-    os.sleep(0.5)
+    os.sleep(0.25)
 end

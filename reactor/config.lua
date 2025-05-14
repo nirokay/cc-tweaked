@@ -9,9 +9,12 @@ local config = {
         reactor = "back",
         monitor = "monitor_1"
     },
+
     relayOutputPowerDirection = "bottom",
     relayInputPowerDirection = "top",
+
     redstoneLimit = 10,
+
     mathRoundingFunction = math.floor
 }
 
