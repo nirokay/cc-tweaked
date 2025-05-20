@@ -8,10 +8,13 @@ local reactor = devices.reactor
 local debugPrint = true
 while true do
     -- Input:
+    if devices.relay.shutdown.getAnalogInput(config.direction.relay.shutdownInput) ~= 0 then
+        if reactor.getStatus() then reactor.scram() end
+    end
     reactor.setBurnRate(
         math.min(
-            devices.relay.burnRateInput.getAnalogInput(config.relayInputPowerDirection),
-            reactor.getMaxBurnRate()
+            devices.relay.burnRateInput.getAnalogInput(config.relayInputPowerDirection) or 0,
+            reactor.getMaxBurnRate() or 0
         )
     )
 
@@ -19,22 +22,22 @@ while true do
     devices.setPower(
         devices.relay.fuel,
         utils.getPercentage(
-            reactor.getFuel().amount,
-            reactor.getFuelCapacity(),
+            reactor.getFuel().amount or 0,
+            reactor.getFuelCapacity() or 0,
             config.redstoneLimit
         )
     )
     devices.setPower(
         devices.relay.water,
         utils.getPercentage(
-            reactor.getCoolant().amount,
-            reactor.getCoolantCapacity(),
+            reactor.getCoolant().amount or 0,
+            reactor.getCoolantCapacity() or 0,
             config.redstoneLimit
         )
     )
     devices.setPower(
         devices.relay.burnRateOutput,
-        math.min(config.mathRoundingFunction(reactor.getActualBurnRate()), 15)
+        math.min(config.mathRoundingFunction(reactor.getActualBurnRate() or 0), 15)
     )
 
     -- Monitor:
