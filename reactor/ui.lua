@@ -88,7 +88,7 @@ function ui.updateTurbine()
     ui.writeColouredCentered(
         2,
         colours.lightGrey,
-        "Steam: " .. fmtDecimal(turbine.getSteamFilledPercentage() .. "%")
+        "Steam: " .. fmtDecimal(turbine.getSteamFilledPercentage()) .. "%"
     )
 end
 
