@@ -6,6 +6,9 @@ local turbine = devices.turbine
 local monitorReactor = devices.monitor.reactor
 local monitorTurbine = devices.monitor.turbine
 
+monitorReactor.clear()
+monitorTurbine.clear()
+
 local currentMonitor = monitorReactor
 
 
@@ -81,14 +84,14 @@ end
 function ui.updateTurbine()
     currentMonitor = monitorTurbine
     ui.writeColouredCentered(
-        1,
+        2,
         colours.yellow,
         "Production: " .. fmtEnergy(turbine.getProductionRate())
     )
     ui.writeColouredCentered(
-        2,
+        3,
         colours.lightGrey,
-        "Steam: " .. fmtDecimal(turbine.getSteamFilledPercentage()) .. "%"
+        "Steam: " .. fmtDecimal(turbine.getSteamFilledPercentage()) * 100 .. "%"
     )
 end
 
