@@ -4,14 +4,24 @@ local config = {
             fuel = "redstone_relay_4",
             water = "redstone_relay_3",
             burnRateOutput = "redstone_relay_2",
-            burnRateInput = "redstone_relay_5"
+            burnRateInput = "redstone_relay_5",
+            shutdown = "redstone_relay_6"
         },
         reactor = "back",
-        monitor = "monitor_1"
+        turbine = "turbineValve_1",
+        monitor = {
+            reactor = "monitor_1",
+            turbine = "monitor_2"
+        }
     },
 
-    relayOutputPowerDirection = "bottom",
-    relayInputPowerDirection = "top",
+    direction = {
+        relay = {
+            redstoneOutput = "bottom",
+            burnRateInput = "top",
+            shutdownInput = "top"
+        }
+    },
 
     redstoneLimit = 10,
 

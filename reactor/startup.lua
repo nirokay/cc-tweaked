@@ -8,12 +8,14 @@ local reactor = devices.reactor
 local debugPrint = true
 while true do
     -- Input:
-    if devices.relay.shutdown.getAnalogInput(config.direction.relay.shutdownInput) ~= 0 then
-        if reactor.getStatus() then reactor.scram() end
+    if devices.relay.shutdown ~= nil then
+        if devices.relay.shutdown.getAnalogInput(config.direction.relay.shutdownInput) ~= 0 then
+            if reactor.getStatus() then reactor.scram() end
+        end
     end
     reactor.setBurnRate(
         math.min(
-            devices.relay.burnRateInput.getAnalogInput(config.relayInputPowerDirection) or 0,
+            devices.relay.burnRateInput.getAnalogInput(config.direction.relay.burnRateInput) or 0,
             reactor.getMaxBurnRate() or 0
         )
     )
@@ -41,8 +43,9 @@ while true do
     )
 
     -- Monitor:
-    if devices.monitor then
-        ui.update()
+    if devices.monitor ~= nil then
+        ui.updateReactor()
+        ui.updateTurbine()
     end
 
     -- Log:
