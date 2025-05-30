@@ -57,6 +57,7 @@ end
 function isolateBlocks(blocks)
     -- Loop through blocks
     local temp = {}
+    if blocks == nil then return temp end
     for i, v in pairs(blocks) do
         if v.name == target then
             table.insert(temp, v)
