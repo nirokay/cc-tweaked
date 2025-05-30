@@ -5,6 +5,7 @@
         "colours",
         "colors",
         "fs",
-        "term"
+        "term",
+        "turtle"
     ]
 }
